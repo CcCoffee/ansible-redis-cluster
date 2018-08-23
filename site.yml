@@ -1,0 +1,6 @@
+---
+- name: install redis
+  hosts: all
+  user: root
+  roles:
+    - roles/redissrvs

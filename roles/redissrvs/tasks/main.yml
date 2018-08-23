@@ -1,0 +1,4 @@
+---
+# tasks file for redis
+- name: get redis package
+  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/redis-{{ version }}.tar.gz
