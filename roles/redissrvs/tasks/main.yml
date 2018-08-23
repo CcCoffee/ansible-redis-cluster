@@ -3,7 +3,7 @@
 - name: remove /root/test-ansible/redis
   file: path=/root/test-ansible/redis owner=root group=root mode=0655 state=absent
 - name: make directories
-  shell: mkdir -p /home/redis/6379/{config,data,logs} && mkdir -p /home/redis/6380/{config,data,logs}
+  shell: mkdir -p /root/test-ansible/redis/6379/{config,data,logs} && mkdir -p /root/test-ansible/redis/6380/{config,data,logs}
 - name: get redis package
   get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/test-ansible/redis-{{ version }}.tar.gz
 - name: Untar redis files
