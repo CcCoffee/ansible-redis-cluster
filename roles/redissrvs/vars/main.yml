@@ -2,4 +2,4 @@
 version: 4.0.11
 redis_dir: /root/test-ansible/redis
 redis_cluster_replicas: 0
-redis_node_list: "{{ groups['all'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | arraypermute( [':'] ) | arraypermute( [ 6379 ] ) }}"
+redis_node_list: "{{ groups['all'] | map('extract', hostvars, ['ansible_default_ipv4', 'address'])"
