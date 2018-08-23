@@ -32,7 +32,14 @@
     - 6379
     - 6380
 - name: change mode
-  shell: chmod 755 /etc/init.d/redis_{{ item }} && chkconfig --add redis_{{ item }}
+  shell: chmod 755 /etc/init.d/redis_{{ item }}
   with_items:
     - 6379
     - 6380
+- name: install sysv-rc-conf
+  apt: name=sysv-rc-conf state=latest
+#- name: change mode
+#  shell: chkconfig --add redis_{{ item }}
+#  with_items:
+#    - 6379
+#    - 6380
