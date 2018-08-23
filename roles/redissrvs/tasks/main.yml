@@ -43,8 +43,11 @@
   with_items:
     - 6379
     - 6380
-- name: start service
-  shell: service redis_{{ item }} start
+- name: start and enable the redis node.
+  service:
+    name: redis_{{ item }}
+    state: started
+    enabled: yes
   with_items:
     - 6379
     - 6380
