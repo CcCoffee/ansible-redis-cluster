@@ -11,15 +11,16 @@
     - { port: 6380, type: "config"}
     - { port: 6380, type: "logs"}
     - { port: 6380, type: "data"}
-#- name: make directories
-#  shell: mkdir -p /root/test-ansible/redis/6379/{config,data,logs} && mkdir -p /root/test-ansible/redis/6380/{config,data,logs}
-#- name: get redis package
-#  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/test-ansible/redis-{{ version }}.tar.gz
-#- name: Untar redis files
-#  unarchive: src=/root/test-ansible/redis-{{ version }}.tar.gz dest=/root/test-ansible copy=no
-#- name: make install
-#  shell: cd /root/test-ansible/redis-{{ version }} && make && cd /root/test-ansible/redis-{{ version }}/src && make PREFIX=../../ install
-#- name: Create the cluster node redis.conf
-#  template:
-#    src: "redis.conf.j2"
-#    dest: "{{ redis_dir }}/{{ redis_port }}/config/redis_{{ redis_port }}.conf"
+- name: get redis package
+  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/test-ansible/redis-{{ version }}.tar.gz
+- name: Untar redis files
+  unarchive: src=/root/test-ansible/redis-{{ version }}.tar.gz dest=/root/test-ansible copy=no
+- name: make install
+  shell: cd /root/test-ansible/redis-{{ version }} && make && cd /root/test-ansible/redis-{{ version }}/src && make PREFIX=../../ install
+- name: Create the cluster node redis.conf
+  template:
+    src: "redis.conf.j2"
+    dest: "{{ redis_dir }}/{{ item }}/config/redis_{{ item }}.conf"
+    with_items:
+      - 6379
+      - 6380
