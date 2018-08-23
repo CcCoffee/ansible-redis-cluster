@@ -3,10 +3,14 @@
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
 - name: remove /root/test-ansible/redis/6379/config
-  file: path={{ redis_dir }}/{{ item }}/config owner=root group=root mode=0655 state=directory
+  file: path={{ redis_dir }}/{{ item.port }}/{{ item.type }} owner=root group=root mode=0655 state=directory
   with_items:
-    - 6379
-    - 6380
+    - { port: 6379, type: "config"}
+    - { port: 6379, type: "logs"}
+    - { port: 6379, type: "data"}
+    - { port: 6380, type: "config"}
+    - { port: 6380, type: "logs"}
+    - { port: 6380, type: "data"}
 #- name: make directories
 #  shell: mkdir -p /root/test-ansible/redis/6379/{config,data,logs} && mkdir -p /root/test-ansible/redis/6380/{config,data,logs}
 #- name: get redis package
