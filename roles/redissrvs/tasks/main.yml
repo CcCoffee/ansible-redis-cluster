@@ -13,7 +13,4 @@
 - name: Create the cluster node redis.conf
   template:
     src: "redis.conf.j2"
-    dest: "{{ redis_conf_dir }}/redis_{{ item }}.conf"
-    with_items:
-          - 6379
-          - 6380
+    dest: "{{ redis_conf_dir }}/redis_{{ redis_port }}.conf"
