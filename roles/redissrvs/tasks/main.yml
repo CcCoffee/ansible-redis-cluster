@@ -9,4 +9,6 @@
 - name: Ensure /root/test-ansible/redis/{{ redis_port }}/config exists
   file: path=/root/test-ansible/redis/{{ redis_port }}/config owner=root group=root mode=0655 state=directory
 - name: get redis package
-  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/redis-{{ version }}.tar.gz
+  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/test-ansible/redis/redis-{{ version }}.tar.gz
+- name: Untar redis files
+  unarchive: src=/root/test-ansible/redis/redis-{{ version }}.tar.gz dest=/root/test-ansible/redis/pkg copy=no
