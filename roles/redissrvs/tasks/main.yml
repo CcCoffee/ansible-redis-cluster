@@ -63,4 +63,4 @@
 - name: print node redis_node_list2
   debug:
     msg: "{{ item }}"
-  loop: "{{ redis_node_list | json_query('msg[*]') }}"
+  loop: "{{ redis_node_list }}"
