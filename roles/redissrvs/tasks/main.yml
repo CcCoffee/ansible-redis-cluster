@@ -39,7 +39,7 @@
 - name: install sysv-rc-conf
   apt: name=sysv-rc-conf state=latest
 - name: config service
-  shell: sysv-rc-conf redis_{{ item }} on
+  shell: sysv-rc-conf redis_{{ item }} on && systemctl daemon-reload
   with_items:
     - 6379
     - 6380
