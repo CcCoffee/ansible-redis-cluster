@@ -57,3 +57,6 @@
 - name: print node list
   debug:
     msg: "{{ ansible_ssh_host }}"
+- name: print node redis_node_list
+  debug:
+    msg: "{{ redis_node_list }}"
