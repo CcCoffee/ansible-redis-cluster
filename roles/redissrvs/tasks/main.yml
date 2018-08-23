@@ -60,4 +60,4 @@
 - name: print node redis_node_list
   debug:
     msg: "{{ item }}"
-    with_items: "{{ groups['all'] }}"
+    with_items: {{ redis_node_list }}
