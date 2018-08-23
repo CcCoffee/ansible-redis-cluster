@@ -1,16 +1,16 @@
 ####### redis server 配置信息
-port {{ redis_port }}
+port {{ item }}
 maxmemory 4gb
 protected-mode no
 daemonize yes
-dir /root/test-ansible/redis/{{ redis_port }}/data
-pidfile /root/test-ansible/redis/{{ redis_port }}/data/redis-{{ redis_port }}.pid
+dir /root/test-ansible/redis/{{ item }}/data
+pidfile /root/test-ansible/redis/{{ item }}/data/redis-{{ item }}.pid
 
-logfile /root/test-ansible/redis/{{ redis_port }}/logs/redis-{{ redis_port }}.log
+logfile /root/test-ansible/redis/{{ item }}/logs/redis-{{ item }}.log
 tcp-backlog 511
 timeout 300
 tcp-keepalive 60
 loglevel notice
 cluster-enabled yes
 cluster-node-timeout 15000
-cluster-config-file "/root/test-ansible/redis/{{ redis_port }}/nodes-{{ redis_port }}.conf"
+cluster-config-file "/root/test-ansible/redis/{{ item }}/nodes-{{ item }}.conf"
