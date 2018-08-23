@@ -1,3 +1,4 @@
 version: 4.0.11
 redis_dir: /root/test-ansible/redis
 redis_port: 6379
+redis_config_dir: /root/test-ansible/redis/{{ redis_port }}/config
