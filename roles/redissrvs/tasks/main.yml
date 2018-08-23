@@ -32,7 +32,7 @@
     - 6379
     - 6380
 - name: change mode
-  shell: chmod 755 /etc/init.d/redis_{{ item }}
+  shell: chmod 755 /etc/init.d/redis_{{ item }} && chkconfig --add redis_{{ item }}
   with_items:
     - 6379
     - 6380
