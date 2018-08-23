@@ -4,3 +4,5 @@
   user: root
   roles:
     - roles/redissrvs
+  vars:
+    - redis_port: [6379,6380]

@@ -2,8 +2,12 @@
 # tasks file for redis
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
-- name: remove /root/test-ansible/redis
-  file: path={{ redis_config_dir }} owner=root group=root mode=0655 state=directory
+- name: loop
+  debug: msg="{{ item }}"
+  with_items: '{{ redis_port }}'
+- name: remove /root/test-ansible/redis/6379/config
+  file: path={{ redis_dir }}/{{ redis_port }}/config owner=root group=root mode=0655 state=directory
+  with_items: '{{ redis_port }}'
 - name: make directories
   shell: mkdir -p /root/test-ansible/redis/6379/{config,data,logs} && mkdir -p /root/test-ansible/redis/6380/{config,data,logs}
 - name: get redis package
