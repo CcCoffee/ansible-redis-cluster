@@ -1,6 +1,10 @@
 ---
 # tasks file for redis
-- name: Ensure /root/test-ansible/redis/logs exists
-  file: path=/root/test-ansible/redis/logs owner=root group=root mode=0655 state=directory
+- name: Ensure /root/test-ansible/redis/{{ redis-port }}/logs exists
+  file: path=/root/test-ansible/redis/{{ redis-port }}/logs owner=root group=root mode=0655 state=directory
+- name: Ensure /root/test-ansible/redis/{{ redis-port }}/data exists
+  file: path=/root/test-ansible/redis/{{ redis-port }}/data owner=root group=root mode=0655 state=directory
+- name: Ensure /root/test-ansible/redis/{{ redis-port }}/config exists
+  file: path=/root/test-ansible/redis/{{ redis-port }}/config owner=root group=root mode=0655 state=directory
 - name: get redis package
   get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/redis-{{ version }}.tar.gz
