@@ -43,3 +43,8 @@
   with_items:
     - 6379
     - 6380
+- name: start service
+  shell: service redis_{{ item }} start
+  with_items:
+    - 6379
+    - 6380
