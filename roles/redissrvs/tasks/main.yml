@@ -38,8 +38,8 @@
     - 6380
 - name: install sysv-rc-conf
   apt: name=sysv-rc-conf state=latest
-#- name: change mode
-#  shell: chkconfig --add redis_{{ item }}
-#  with_items:
-#    - 6379
-#    - 6380
+- name: config service
+  shell: sysv-rc-conf redis_{{ item }} on
+  with_items:
+    - 6379
+    - 6380
