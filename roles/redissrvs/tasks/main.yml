@@ -1,7 +1,7 @@
 ---
 # tasks file for redis
-- name: remove redis service file
-  shell : "rm /etc/rc*/K*redis*"
+#- name: remove redis service file
+#  shell : "rm /etc/rc*/K*redis*"
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
 - name: remove /root/test-ansible/redis/6379/config
