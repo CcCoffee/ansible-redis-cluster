@@ -2,4 +2,4 @@
 
 host_string="{% for host in groups['all'] %}{{ hostvars[host]['inventory_hostname'] }}:6379 {% endfor %} {% for host in groups['all'] %}{{ hostvars[host]['inventory_hostname'] }}:6380 {% endfor %}"
 
-yes 'yes' | {{ redis_bin_dir }}/redis-trib.rb create --replicas 1 $host_string
+{{ redis_bin_dir }}/redis-trib.rb create --yes --replicas 1 $host_string
