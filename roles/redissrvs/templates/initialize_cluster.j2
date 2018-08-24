@@ -1,0 +1,5 @@
+#!/bin/bash
+
+host_string="{% for host in groups['all'] %}{{ hostvars[host]['inventory_hostname'] }}:6379 {% endfor %}"
+
+yes 'yes' | {{ redis_bin_dir }}/redis-trib.rb create --replicas 1 $host_string
