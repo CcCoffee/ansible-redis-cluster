@@ -17,6 +17,8 @@
   unarchive: src=/root/test-ansible/redis-{{ version }}.tar.gz dest=/root/test-ansible copy=no
 - name: make install
   shell: cd /root/test-ansible/redis-{{ version }} && make && cd /root/test-ansible/redis-{{ version }}/src && make PREFIX=../../ install
+- name: copy
+  shell: cp /root/test-ansible/redis-4.0.11/src/redis-trib.rb /root/test-ansible/bin/
 - name: Create the cluster node redis.conf
   template:
     src: "redis.conf.j2"
@@ -51,9 +53,9 @@
   with_items:
     - 6379
     - 6380
-- name: meet node
-  shell: /root/test-ansible/bin/redis-cli -h {{ ansible_all_ipv4_addresses }} -p 6379 #   && cluster meet {{ansible_all_ipv4_addresses}} 6380
-  run_once: true
+#- name: meet node
+#  shell: /root/test-ansible/bin/redis-cli -h {{ ansible_all_ipv4_addresses }} -p 6379 #   && cluster meet {{ansible_all_ipv4_addresses}} 6380
+#  run_once: true
 - name: install rubygems
   apt: name=rubygems state=latest
 #- name: print node list
