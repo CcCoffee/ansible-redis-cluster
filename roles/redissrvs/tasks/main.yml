@@ -25,6 +25,7 @@
   template:
     src: "redis.conf.j2"
     dest: "{{ redis_dir }}/{{ item }}/config/redis_{{ item }}.conf"
+    force: true
   with_items:
     - 6379
     - 6380
@@ -32,6 +33,7 @@
   template:
     src: "redis.service.j2"
     dest: "/etc/init.d/redis_{{ item }}.service"
+    force: true
   with_items:
     - 6379
     - 6380
