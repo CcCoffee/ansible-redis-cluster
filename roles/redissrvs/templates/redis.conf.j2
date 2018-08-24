@@ -4,13 +4,13 @@ maxmemory 4gb
 protected-mode no
 daemonize yes
 dir {{ redis_dir }}/{{ item }}/data
-pidfile {{ redis_dir }}/{{ item }}/data/redis-{{ item }}.pid
+pidfile {{ redis_dir }}/{{ item }}/data/redis{{ item }}.pid
 
-logfile {{ redis_dir }}/{{ item }}/logs/redis-{{ item }}.log
+logfile {{ redis_dir }}/{{ item }}/logs/redis{{ item }}.log
 tcp-backlog 511
 timeout 300
 tcp-keepalive 60
 loglevel notice
 cluster-enabled yes
 cluster-node-timeout 15000
-cluster-config-file "{{ redis_dir }}/{{ item }}/nodes-{{ item }}.conf"
+cluster-config-file "{{ redis_dir }}/{{ item }}/nodes{{ item }}.conf"
