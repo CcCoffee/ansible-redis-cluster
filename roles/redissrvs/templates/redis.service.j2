@@ -14,7 +14,7 @@
 EXEC=/root/test-ansible/bin/redis-server
 CLIEXEC=/root/test-ansible/bin/redis-cli
 
-PIDFILE={{ redis_dir }}/{{ item }}/data/redis-{{ item }}.pid
+PIDFILE={{ redis_dir }}/{{ item }}/data/redis_{{ item }}.pid
 CONF="{{ redis_dir }}/{{ item }}/config/redis_{{ item }}.conf"
 case "$1" in
     start)
@@ -33,7 +33,7 @@ case "$1" in
         else
                 PID=$(cat $PIDFILE)
                 echo "Stopping ..."
-                $CLIEXEC -p $REDISPORT shutdown
+                $CLIEXEC -p {{ item }} shutdown
                 while [ -x /proc/${PID} ]
                 do
                     echo "Waiting for Redis to shutdown ..."
