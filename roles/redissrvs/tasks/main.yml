@@ -58,7 +58,7 @@
 - name: start and enable the redis node.
   service:
     name: redis_{{ item }}
-    state: started
+    state: restarted
     enabled: yes
     force: true
   with_items:
