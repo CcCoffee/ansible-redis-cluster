@@ -38,8 +38,13 @@
   with_items:
     - 6379
     - 6380
-- name: change mode
+- name: change mode1
   shell: chmod 755 /etc/init.d/redis_{{ item }}.service
+  with_items:
+    - 6379
+    - 6380
+- name: change mode2
+  shell: chmod 755 /etc/init.d/redis_{{ item }}
   with_items:
     - 6379
     - 6380
