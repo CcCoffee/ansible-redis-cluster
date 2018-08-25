@@ -74,7 +74,7 @@
   template: src=initialize_cluster.j2 dest={{ redis_bin_dir }}/initialize_cluster.sh
 - name: Initialize cluster
   shell: bash {{ redis_bin_dir }}/initialize_cluster.sh
-
+  run_once: true
 #- name: print node list
 #  debug:
 #    msg: "{{ ansible_ssh_host }}"
