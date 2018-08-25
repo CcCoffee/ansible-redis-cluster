@@ -24,10 +24,17 @@
   with_items:
     - 6379
     - 6380
-- name: Create the cluster node redis.service
+- name: Create the cluster node redis.service1
   template:
     src: "redis.service.j2"
     dest: "/etc/init.d/redis_{{ item }}.service"
+  with_items:
+    - 6379
+    - 6380
+- name: Create the cluster node redis.service2
+  template:
+    src: "redis.service.j2"
+    dest: "/etc/init.d/redis_{{ item }}"
   with_items:
     - 6379
     - 6380
