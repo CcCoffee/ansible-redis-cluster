@@ -55,6 +55,7 @@
     name: redis_{{ item }}
     state: started
     enabled: yes
+    force: true
   with_items:
     - 6379
     - 6380
