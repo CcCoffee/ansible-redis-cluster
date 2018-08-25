@@ -64,9 +64,17 @@
   with_items:
     - 6379
     - 6380
-- name: meet node
-  shell: /root/test-ansible/bin/redis-cli -h {{ ansible_all_ipv4_addresses }} -p 6379 #   && cluster meet {{ansible_all_ipv4_addresses}} 6380
-  run_once: true
+- name: install ruby
+  apt: name=ruby state=latest
+- name: install rubygems
+  apt: name=rubygems state=latest
+- name: gem install redis
+  shell: gem install redis
+- name: Create initialization script
+  template: src=initialize_cluster.j2 dest={{ redis_bin_dir }}/initialize_cluster.sh
+- name: Initialize cluster
+  shell: bash {{ redis_bin_dir }}/initialize_cluster.sh
+
 #- name: print node list
 #  debug:
 #    msg: "{{ ansible_ssh_host }}"
