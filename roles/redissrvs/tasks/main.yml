@@ -13,7 +13,7 @@
   with_items:
     - { port: "{{redis_port[0]}}", type: "config"}
     - { port: "{{redis_port[0]}}", type: "logs"}
-    - { port: "{{redis_port[1]}}", type: "data"}
+    - { port: "{{redis_port[0]}}", type: "data"}
     - { port: "{{redis_port[1]}}", type: "config"}
     - { port: "{{redis_port[1]}}", type: "logs"}
     - { port: "{{redis_port[1]}}", type: "data"}
