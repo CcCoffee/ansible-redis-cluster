@@ -2,6 +2,4 @@
 
 host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} \n{{ redis_port[0] }} {% endfor %} {% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n{% endfor %}"
 
-yes 'yes' | {{ redis_bin_dir }}/redis-trib.rb create --replicas {{ redis_cluster_replicas }} $host_string
-
 echo -e cluster meet $host_string | {{ redis_bin_dir }}/redis-cli -h {{ ansible_all_ipv4_addresses }} -p {{ redis_port[0]}}
