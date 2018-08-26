@@ -2,9 +2,11 @@
 # tasks file for redis
 
 # make a clean environment
-- name: kill all redis process
-  shell: ps -ef | grep redis | awk '{print $2}' | xargs kill -9
-  ignore_errors: True
+- name: stop the redis service.
+  service:
+    name: redis_{{ item }}
+    state: stopped
+    ignore_errors: True
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
 - name: mkdir for redis - config,logs,data
