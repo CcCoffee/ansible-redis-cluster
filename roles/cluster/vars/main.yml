@@ -1,6 +1,3 @@
 ---
 redis_bin_dir: /root/test-ansible/redis/bin
 redis_cluster_replicas: 1
-redis_port:
-  - 6379
-  - 6380
