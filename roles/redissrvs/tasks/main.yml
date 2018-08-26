@@ -7,6 +7,9 @@
     name: redis_{{ item }}
     state: stopped
     ignore_errors: True
+  with_items:
+    - 6379
+    - 6380
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
 - name: mkdir for redis - config,logs,data
