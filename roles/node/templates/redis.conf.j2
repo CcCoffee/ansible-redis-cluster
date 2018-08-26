@@ -1,0 +1,16 @@
+####### redis server 配置信息
+port {{ item }}
+maxmemory 4gb
+protected-mode no
+daemonize yes
+dir {{ redis_dir }}/{{ item }}/data
+pidfile {{ redis_dir }}/{{ item }}/data/redis_{{ item }}.pid
+
+logfile {{ redis_dir }}/{{ item }}/logs/redis_{{ item }}.log
+tcp-backlog 511
+timeout 300
+tcp-keepalive 60
+loglevel notice
+cluster-enabled yes
+cluster-node-timeout 15000
+cluster-config-file "{{ redis_dir }}/{{ item }}/nodes_{{ item }}.conf"

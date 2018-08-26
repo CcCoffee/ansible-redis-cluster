@@ -3,7 +3,7 @@
   hosts: all
   user: root
   roles:
-    - roles/redissrvs
+    - roles/node
   vars:
     - redis_port:
       - 6379

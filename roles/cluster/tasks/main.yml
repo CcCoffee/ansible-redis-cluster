@@ -6,8 +6,9 @@
   shell: service redis_{{ item }} stop
   with_items:
     - "{{ redis_port }}"
-- name: remove /root/test-ansible/redis
+- name: remove redis_dir
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
+# prepare install environment
 - name: mkdir for redis - config,logs,data
   file: path={{ redis_dir }}/{{ item.port }}/{{ item.type }} owner=root group=root mode=0655 state=directory
   with_items:
@@ -21,6 +22,7 @@
   get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest={{ redis_dir }}/redis-{{ version }}.tar.gz
 - name: Untar redis files
   unarchive: src={{ redis_dir }}/redis-{{ version }}.tar.gz dest={{ redis_dir }} copy=no
+# install redis
 - name: make install
   shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
 - name: copy redis-trib.rb
@@ -56,7 +58,7 @@
     - "{{ redis_port }}"
 - name: install sysv-rc-conf
   apt: name=sysv-rc-conf state=latest
-- name: config service
+- name: add services into linux
   shell: sysv-rc-conf redis_{{ item }} on && systemctl daemon-reload
   with_items:
     - "{{ redis_port }}"
@@ -68,6 +70,7 @@
     force: true
   with_items:
     - "{{ redis_port }}"
+# set ruby cluster by ruby script
 - name: install ruby
   apt: name=ruby state=latest
 - name: install rubygems
