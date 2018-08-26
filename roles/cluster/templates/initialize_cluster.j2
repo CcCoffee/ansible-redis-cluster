@@ -1,7 +1,5 @@
 #!/bin/bash
 
-xargs kill -9 ps -ef | grep redis_6379 | awk '{print $2}'
-
 host_string="{% for host in groups['all'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ redis_port[0] }} {% endfor %} {% for host in groups['all'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ redis_port[1] }} {% endfor %}"
 
 yes 'yes' | {{ redis_bin_dir }}/redis-trib.rb create --replicas {{ redis_cluster_replicas }} $host_string
