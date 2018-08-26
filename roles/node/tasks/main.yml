@@ -20,13 +20,13 @@
   unarchive: src={{ redis_dir }}/redis-{{ version }}.tar.gz dest={{ redis_dir }} copy=no
 - name: remove redis package
   file: path={{ redis_dir }}/redis-{{ version }}.tar.gz owner=root group=root mode=0655 state=absent
-- name: remove redis package
-  file: path={{ redis_dir }}/redis-{{ version }} owner=root group=root mode=0655 state=absent
 # install redis
 - name: make install
   shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
 - name: copy redis-trib.rb
   shell: cp {{ redis_install_src_dir }}/redis-trib.rb {{ redis_bin_dir }}
+- name: remove redis package
+  file: path={{ redis_dir }}/redis-{{ version }} owner=root group=root mode=0655 state=absent
 - name: Create the cluster node redis.conf
   template:
     src: "redis.conf.j2"
