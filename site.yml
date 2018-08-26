@@ -4,6 +4,7 @@
   user: root
   roles:
     - roles/node
+    - roles/cluster
   vars:
     - redis_port:
       - 6379
