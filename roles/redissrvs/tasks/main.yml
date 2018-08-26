@@ -16,7 +16,9 @@
 - name: Untar redis files
   unarchive: src=/root/test-ansible/redis-{{ version }}.tar.gz dest=/root/test-ansible copy=no
 - name: make install
-  shell: cd /root/test-ansible/redis-{{ version }} && make && cd /root/test-ansible/redis-{{ version }}/src && make PREFIX=../../ install
+  shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
+- name: copy redis-trib.rb
+  copy: src={{ redis_install_src_dir }}/redis-trib.rb dest={{ redis_bin_dir }}
 - name: Create the cluster node redis.conf
   template:
     src: "redis.conf.j2"
