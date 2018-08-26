@@ -1,0 +1,22 @@
+---
+# tasks file for redis
+
+# make a clean environment
+- name: remove redis_dir
+  file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
+# prepare install environment
+- name: mkdir for redis - config,logs,data
+  file: path={{ redis_dir }}/{{ item.port }}/{{ item.type }} owner=root group=root mode=0655 state=directory
+  with_items:
+    - { port: "{{redis_port[0]}}", type: "config"}
+    - { port: "{{redis_port[0]}}", type: "logs"}
+    - { port: "{{redis_port[0]}}", type: "data"}
+    - { port: "{{redis_port[1]}}", type: "config"}
+    - { port: "{{redis_port[1]}}", type: "logs"}
+    - { port: "{{redis_port[1]}}", type: "data"}
+- name: download redis package
+  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest={{ redis_dir }}/redis-{{ version }}.tar.gz
+- name: Untar redis files
+  unarchive: src={{ redis_dir }}/redis-{{ version }}.tar.gz dest={{ redis_dir }} copy=no
+- name: remove redis package
+  file: path={{ redis_dir }}/redis-{{ version }}.tar.gz owner=root group=root mode=0655 state=absent

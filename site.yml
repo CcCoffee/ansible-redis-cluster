@@ -3,6 +3,7 @@
   hosts: all
   user: root
   roles:
+    - roles/core
     - roles/node
     - roles/cluster
   vars:
