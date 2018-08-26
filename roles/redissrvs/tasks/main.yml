@@ -5,8 +5,7 @@
 - name: stop and enable the redis node.
   shell: service redis_{{ item }} stop
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
 - name: mkdir for redis - config,logs,data
@@ -32,41 +31,35 @@
     dest: "{{ redis_dir }}/{{ item }}/config/redis_{{ item }}.conf"
     force: true
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: Create the cluster node redis.service1
   template:
     src: "redis.service.j2"
     dest: "/etc/init.d/redis_{{ item }}.service"
     force: true
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: Create the cluster node redis.service2
   template:
     src: "redis.service.j2"
     dest: "/etc/init.d/redis_{{ item }}"
     force: true
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: change mode1
   shell: chmod 755 /etc/init.d/redis_{{ item }}.service
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: change mode2
   shell: chmod 755 /etc/init.d/redis_{{ item }}
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: install sysv-rc-conf
   apt: name=sysv-rc-conf state=latest
 - name: config service
   shell: sysv-rc-conf redis_{{ item }} on && systemctl daemon-reload
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: start and enable the redis node.
   service:
     name: redis_{{ item }}
@@ -74,8 +67,7 @@
     enabled: yes
     force: true
   with_items:
-    - 6379
-    - 6380
+    - {{ redis_port }}
 - name: install ruby
   apt: name=ruby state=latest
 - name: install rubygems
@@ -87,3 +79,4 @@
 - name: Initialize cluster
   shell: bash {{ redis_bin_dir }}/initialize_cluster.sh
   run_once: true
+  ignore_errors: True
