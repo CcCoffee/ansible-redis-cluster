@@ -18,7 +18,7 @@
 - name: make install
   shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
 - name: copy redis-trib.rb
-  copy: src={{ redis_install_src_dir }}/redis-trib.rb dest={{ redis_bin_dir }}
+  shell: cp {{ redis_install_src_dir }}/redis-trib.rb dest={{ redis_bin_dir }}
 - name: Create the cluster node redis.conf
   template:
     src: "redis.conf.j2"
