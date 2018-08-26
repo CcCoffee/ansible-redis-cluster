@@ -2,10 +2,12 @@
 # tasks file for redis
 
 # make a clean environment
-- name: stop the redis service.
+- name: stop and enable the redis node.
   service:
     name: redis_{{ item }}
     state: stopped
+    enabled: yes
+    force: true
     ignore_errors: True
   with_items:
     - 6379
