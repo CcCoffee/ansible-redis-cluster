@@ -9,7 +9,10 @@ redis-cli -h {{ hostvars[groups['all'][1]]['inventory_hostname'] }} -p {{ redis_
 redis-cli -h {{ hostvars[groups['all'][2]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {10923..16383}
 
 
-slave_node_id=`redis-cli cluster nodes | grep 6380 | awk '{print $1}'`| sed 's/[ ][ ]*/\n/g'
+slave_node_id=`redis-cli cluster nodes | grep 6380 | awk '{print $1}'`
 
-
-echo $slave_node_id | xargs cluster replicate | redis-cli
+index = 0
+for item in `redis-cli cluster nodes | grep 6380 | awk '{print $1}'`
+{
+redis-cli -h {{ hostvars[groups['all'][$index]]['inventory_hostname'] }} -p {{ redis_port[1] }} cluster replicate $item
+}
