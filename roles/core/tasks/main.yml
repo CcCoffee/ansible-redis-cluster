@@ -13,8 +13,8 @@
     - { port: "{{redis_port[1]}}", type: "logs"}
     - { port: "{{redis_port[1]}}", type: "data"}
 - name: download redis package
-  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest={{ redis_dir }}/redis-{{ version }}.tar.gz
+  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest={{ redis_dir }}/../redis-{{ version }}.tar.gz
 - name: Untar redis files
-  unarchive: src={{ redis_dir }}/redis-{{ version }}.tar.gz dest={{ redis_dir }} copy=no
+  unarchive: src={{ redis_dir }}/../redis-{{ version }}.tar.gz dest={{ redis_dir }} copy=no
 - name: remove redis package
-  file: path={{ redis_dir }}/redis-{{ version }}.tar.gz owner=root group=root mode=0655 state=absent
+  file: path={{ redis_dir }}/../redis-{{ version }}.tar.gz owner=root group=root mode=0655 state=absent
