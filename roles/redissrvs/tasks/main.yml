@@ -3,12 +3,7 @@
 
 # make a clean environment
 - name: stop and enable the redis node.
-  service:
-    name: redis_{{ item }}
-    state: stopped
-    enabled: yes
-    force: true
-    ignore_errors: True
+  shell: service redis_{{ item }} stop
   with_items:
     - 6379
     - 6380
