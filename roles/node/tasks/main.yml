@@ -2,10 +2,6 @@
 # tasks file for redis
 
 # make a clean environment
-- name: stop and enable the redis node.
-  shell: service redis_{{ item }} stop
-  with_items:
-    - "{{ redis_port }}"
 - name: remove redis_dir
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
 # prepare install environment
