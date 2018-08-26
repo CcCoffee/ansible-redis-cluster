@@ -1,6 +1,4 @@
 ---
-# tasks file for redis
-
 # make a clean environment
 - name: remove redis_dir
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent

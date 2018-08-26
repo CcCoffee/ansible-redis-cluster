@@ -1,6 +1,4 @@
 ---
-# tasks file for redis
-
 # install redis
 - name: make install
   shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
