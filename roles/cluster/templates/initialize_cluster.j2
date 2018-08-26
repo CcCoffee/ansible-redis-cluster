@@ -9,5 +9,9 @@ redis-cli -h {{ hostvars[groups['all'][1]]['inventory_hostname'] }} -p {{ redis_
 redis-cli -h {{ hostvars[groups['all'][2]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {10923..16383}
 
 
+master_node_id_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $1}'`)
+echo ${master_node_id_array[@]}
+master_node_ip_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $2}' | cut -d ":" -f 1`)
+echo ${master_node_ip_array[@]}
 
 
