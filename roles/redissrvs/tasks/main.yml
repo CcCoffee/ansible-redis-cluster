@@ -1,8 +1,12 @@
 ---
 # tasks file for redis
+
+# make a clean environment
+- name: kill all redis process
+  shell: ps -ef | grep redis | awk '{print $2}' | xargs kill -9
 - name: remove /root/test-ansible/redis
   file: path={{ redis_dir }} owner=root group=root mode=0655 state=absent
-- name: remove /root/test-ansible/redis/6379/config
+- name: mkdir for redis - config,logs,data
   file: path={{ redis_dir }}/{{ item.port }}/{{ item.type }} owner=root group=root mode=0655 state=directory
   with_items:
     - { port: 6379, type: "config"}
@@ -12,9 +16,9 @@
     - { port: 6380, type: "logs"}
     - { port: 6380, type: "data"}
 - name: get redis package
-  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest=/root/test-ansible/redis-{{ version }}.tar.gz
+  get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest={{ redis_dir }}/redis-{{ version }}.tar.gz
 - name: Untar redis files
-  unarchive: src=/root/test-ansible/redis-{{ version }}.tar.gz dest=/root/test-ansible copy=no
+  unarchive: src={{ redis_dir }}/redis-{{ version }}.tar.gz dest={{ redis_dir }} copy=no
 - name: make install
   shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
 - name: copy redis-trib.rb
