@@ -11,12 +11,12 @@
 - name: mkdir for redis - config,logs,data
   file: path={{ redis_dir }}/{{ item.port }}/{{ item.type }} owner=root group=root mode=0655 state=directory
   with_items:
-    - { port: 6379, type: "config"}
-    - { port: 6379, type: "logs"}
-    - { port: 6379, type: "data"}
-    - { port: 6380, type: "config"}
-    - { port: 6380, type: "logs"}
-    - { port: 6380, type: "data"}
+    - { port: "{{redis_port[0]}}", type: "config"}
+    - { port: "{{redis_port[0]}}", type: "logs"}
+    - { port: "{{redis_port[1]}}", type: "data"}
+    - { port: "{{redis_port[1]}}", type: "config"}
+    - { port: "{{redis_port[1]}}", type: "logs"}
+    - { port: "{{redis_port[1]}}", type: "data"}
 - name: get redis package
   get_url: url=http://download.redis.io/releases/redis-{{ version }}.tar.gz dest={{ redis_dir }}/redis-{{ version }}.tar.gz
 - name: Untar redis files
