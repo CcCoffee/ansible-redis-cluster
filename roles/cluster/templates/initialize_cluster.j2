@@ -1,10 +1,8 @@
 #!/bin/bash
 
-master_host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[0] }} \n {% endfor %}"
-slave_host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n {% endfor %}"
+host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[0] }} \n {% endfor %} {% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n {% endfor %}"
 
-echo -e cluster meet $master_host_string | {{ redis_bin_dir }}/redis-cli -p {{ redis_port[0]}}
-echo -e cluster meet $slave_host_string | {{ redis_bin_dir }}/redis-cli -p {{ redis_port[0]}}
+echo -e cluster meet $host_string | {{ redis_bin_dir }}/redis-cli -p {{ redis_port[0]}}
 
 redis-cli -h {{ hostvars[groups['all'][0]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {0..5461}
 redis-cli -h {{ hostvars[groups['all'][1]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {5462..10922}
