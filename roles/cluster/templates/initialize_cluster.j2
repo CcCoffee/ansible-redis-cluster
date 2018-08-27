@@ -15,12 +15,3 @@ echo ${master_node_id_array[@]}
 master_node_ip_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $2}' | cut -d ":" -f 1`)
 echo ${master_node_ip_array[@]}
 
-for((i=0;i<${#master_node_ip_array[@]};i++))
-do
-  if [ $i == ${#master_node_ip_array[@]}-1 ]
-  then
-    start=0
-  else
-    start=$i+1
-  fi
-done
