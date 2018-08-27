@@ -17,10 +17,5 @@ master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk 
 
 for((i=0;i<${#master_node_ip_array[@]};i++))
 do
-  if [ ${slave_node_ip_array[`expr $i + 1`]} ]
-  then
-    redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
-  else
-    redis-cli -h ${slave_node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
-  fi
+
 done
