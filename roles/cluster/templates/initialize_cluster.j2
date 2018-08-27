@@ -15,15 +15,12 @@ redis-cli -h {{ hostvars[groups['all'][2]]['inventory_hostname'] }} cluster adds
 slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
 
-
 for((i=0;i<${#master_node_ip_array[@]};i++))
 do
   if [ ${slave_node_ip_array[`expr $i + 1`]} ]
   then
-    redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate
-${master_node_id_array[$i]}
+    redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
   else
-    redis-cli -h ${slave_node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate
-${master_node_id_array[$i]}
+    redis-cli -h ${slave_node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
   fi
 done
