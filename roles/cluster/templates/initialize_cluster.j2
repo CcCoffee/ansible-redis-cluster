@@ -33,14 +33,3 @@ do
     fi
   done
 done
-
-
-#for item in `redis-cli cluster nodes | grep {{ redis_port[1]}} | awk '{print $1}'`
-#{
-#echo $item
-#redis-cli -h {{ hostvars[groups['all']]['inventory_hostname'] }} -p {{ redis_port[1] }} cluster replicate $item
-#}
-#slave_ip:与master_node_id不在同一个ip
-#    拿到master_node_id的ip
-#    比较，相同则取数组下一个ip比较，直到不同则赋值。如果数组到了尽头就重头开始比较
-#slave_ip:与master_node_id一一对应
