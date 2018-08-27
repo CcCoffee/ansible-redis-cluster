@@ -2,20 +2,28 @@
 
 host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[0] }} \n {% endfor %} {% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n {% endfor %}"
 
-echo -e cluster meet $host_string | {{ redis_bin_dir }}/redis-cli -p {{ redis_port[0]}}
+master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
+if [ ${#master_node_id_array[@]} -lt 1 ]
+then
+echo -e cluster meet $host_string | /root/test-ansible/redis/bin/redis-cli -p {{ redis_port[0] }}
+fi
 
-redis-cli -h {{ hostvars[groups['all'][0]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {0..5461}
-redis-cli -h {{ hostvars[groups['all'][1]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {5462..10922}
-redis-cli -h {{ hostvars[groups['all'][2]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {10923..16383}
+redis-cli -h {{ hostvars[groups['all'][0]]['inventory_hostname'] }} cluster addslots {0..5461}
+redis-cli -h {{ hostvars[groups['all'][1]]['inventory_hostname'] }} cluster addslots {5462..10922}
+redis-cli -h {{ hostvars[groups['all'][2]]['inventory_hostname'] }} cluster addslots {10923..16383}
 
+slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '{print $2}' | cut -d ":" -f 1`)
+master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
 
-master_node_id_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $1}'`)
-slave_node_id_array=(`redis-cli cluster nodes | grep 6380 | awk '{print $1}'`)
-echo ${master_node_id_array[@]}
-master_node_ip_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $2}' | cut -d ":" -f 1`)
-echo ${master_node_ip_array[@]}
 
 for((i=0;i<${#master_node_ip_array[@]};i++))
 do
-
+  if [ ${slave_node_ip_array[`expr $i + 1`]} ]
+  then
+    redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate
+${master_node_id_array[$i]}
+  else
+    redis-cli -h ${slave_node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate
+${master_node_id_array[$i]}
+  fi
 done
