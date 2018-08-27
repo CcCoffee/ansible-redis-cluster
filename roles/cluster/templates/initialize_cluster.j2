@@ -23,13 +23,4 @@ do
   else
     start=$i+1
   fi
-  for((j=$start;j<${#slave_node_id_array[@]};j++));
-  do
-    if [ ${master_node_ip_array[$i]} == ${slave_node_id_array[$j]} ]
-    then
-      continue
-    else
-      redis-cli -h ${slave_node_id_array[$j]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[i]}
-    fi
-  done
 done
