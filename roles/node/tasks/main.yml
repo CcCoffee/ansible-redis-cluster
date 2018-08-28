@@ -45,6 +45,6 @@
     state: restarted
     enabled: yes
     force: true
-    tags: script
+  tags: script
   with_items:
     - "{{ redis_port }}"
