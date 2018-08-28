@@ -8,20 +8,8 @@ redis-cli -h 192.168.2.112 -p 6379 cluster addslots {5462..10922}
 redis-cli -h 192.168.2.113 -p 6379 cluster addslots {10923..16383}
 
 redis-cli cluster nodes
-while true
-do
-    handshake_array=(`redis-cli cluster nodes | grep handshake`)
-    echo ${handshake_array[*]}
-    {% raw %}
-    if [ ${#handshake_array[@]} -eq 0 ]
-    {% endraw %}
-    then
-      echo handshake_array size = 0
-      break
-    fi
-    echo handshake_array size > 0, sleep 1s
-    sleep 1
-done
+
+sleep 5
 
 slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
