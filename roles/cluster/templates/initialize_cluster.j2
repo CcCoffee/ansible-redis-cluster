@@ -7,6 +7,7 @@ redis-cli -h 192.168.2.111 -p 6379 cluster addslots {0..5461}
 redis-cli -h 192.168.2.112 -p 6379 cluster addslots {5462..10922}
 redis-cli -h 192.168.2.113 -p 6379 cluster addslots {10923..16383}
 
+redis-cli cluster nodes
 while true
 do
     handshake_array=(`redis-cli cluster nodes | grep handshake`)
