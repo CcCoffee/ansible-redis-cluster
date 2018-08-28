@@ -11,20 +11,22 @@ slave_node_ip_array=(`redis-cli cluster nodes | grep 6380 | awk '{print $2}' | c
 master_node_ip_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
 
-{% raw %}
-for((i=0;i<${#master_node_ip_array[@]};i++))
-{% endraw %}
+for i in {1..4}
 do
-  if [ ${slave_node_ip_array[`expr $i + 1`]} ]
-  then
-    echo ${master_node_ip_array[$i]}
-    echo ${slave_node_ip_array[`expr $i + 1`]}
-    redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
-  else
-    echo ${master_node_ip_array[$i]}
-    echo ${slave_node_ip_array[0]}
-    redis-cli -h ${slave_node_ip_array[0]} -p 6380 cluster replicate ${master_node_id_array[$i]}
-  fi
+  {% raw %}
+  for((i=0;i<${#master_node_ip_array[@]};i++))
+  {% endraw %}
+  do
+    if [ ${slave_node_ip_array[`expr $i + 1`]} ]
+    then
+      echo ${master_node_ip_array[$i]}
+      echo ${slave_node_ip_array[`expr $i + 1`]}
+      redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
+    else
+      echo ${master_node_ip_array[$i]}
+      echo ${slave_node_ip_array[0]}
+      redis-cli -h ${slave_node_ip_array[0]} -p 6380 cluster replicate ${master_node_id_array[$i]}
+    fi
+  done
 done
-
 
