@@ -13,6 +13,7 @@ master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk 
 
 echo sleep 3s
 sleep 3
+redis-cli cluster nodes
 {% raw %}
 for((i=0;i<${#master_node_ip_array[@]};i++))
 {% endraw %}
