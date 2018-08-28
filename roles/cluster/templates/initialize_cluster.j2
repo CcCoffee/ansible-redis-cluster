@@ -12,22 +12,21 @@ redis-cli cluster nodes
 echo wait 5s for handshake
 sleep 5
 
-slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '{print $2}' | cut -d ":" -f 1`)
-master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
+node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
 
 {% raw %}
-for((i=0;i<${#master_node_ip_array[@]};i++))
+for((i=0;i<${#node_ip_array[@]};i++))
 {% endraw %}
 do
-  if [ ${master_node_ip_array[`expr $i + 1`]} ]
+  if [ ${node_ip_array[`expr $i + 1`]} ]
   then
-    echo ${master_node_ip_array[$i]}
-    echo ${master_node_ip_array[`expr $i + 1`]}
-    redis-cli -h ${master_node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
+    echo ${node_ip_array[$i]}
+    echo ${node_ip_array[`expr $i + 1`]}
+    redis-cli -h ${node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
   else
-    echo ${master_node_ip_array[$i]}
-    echo ${master_node_ip_array[0]}
-    redis-cli -h ${master_node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
+    echo ${node_ip_array[$i]}
+    echo ${node_ip_array[0]}
+    redis-cli -h ${node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
   fi
 done
