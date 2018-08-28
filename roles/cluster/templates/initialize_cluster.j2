@@ -12,6 +12,18 @@ slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '
 master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
 
+while true
+do
+    handshake_array=(`redis-cli cluster nodes | grep handshake`)
+    if [ ${#handshake_array[@]} -eq 0 ]
+    then
+      echo handshake_array size = 0
+      break
+    fi
+    echo handshake_array size > 0, sleep 1s
+    sleep 1
+done
+
 {% raw %}
 for((i=0;i<${#master_node_ip_array[@]};i++))
 {% endraw %}
