@@ -7,8 +7,8 @@ redis-cli -h 192.168.2.111 -p 6379 cluster addslots {0..5461}
 redis-cli -h 192.168.2.112 -p 6379 cluster addslots {5462..10922}
 redis-cli -h 192.168.2.113 -p 6379 cluster addslots {10923..16383}
 
-slave_node_ip_array=(`redis-cli cluster nodes | grep 6380 | awk '{print $2}' | cut -d ":" -f 1`)
-master_node_ip_array=(`redis-cli cluster nodes | grep 6379 | awk '{print $2}' | cut -d ":" -f 1`)
+slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '{print $2}' | cut -d ":" -f 1`)
+master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
 
 echo sleep 3s
@@ -17,19 +17,15 @@ sleep 3
 for((i=0;i<${#master_node_ip_array[@]};i++))
 {% endraw %}
 do
-  if [ ${slave_node_ip_array[`expr $i + 1`]} ]
+  if [ ${master_node_ip_array[`expr $i + 1`]} ]
   then
-    if [ ${slave_node_ip_array[`expr $i + 1`]} = ${master_node_ip_array[$i]} ]
-    then
-     break
-    fi
     echo ${master_node_ip_array[$i]}
     echo ${slave_node_ip_array[`expr $i + 1`]}
-    redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
+    redis-cli -h ${master_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
   else
     echo ${master_node_ip_array[$i]}
     echo ${slave_node_ip_array[0]}
-    redis-cli -h ${slave_node_ip_array[0]} -p 6380 cluster replicate ${master_node_id_array[$i]}
+    redis-cli -h ${master_node_ip_array[0]} -p 6380 cluster replicate ${master_node_id_array[$i]}
   fi
 done
 
