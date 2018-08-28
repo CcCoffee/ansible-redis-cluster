@@ -10,7 +10,9 @@ redis-cli -h 192.168.2.113 -p 6379 cluster addslots {10923..16383}
 while true
 do
     handshake_array=(`redis-cli cluster nodes | grep handshake`)
+    {% raw %}
     if [ ${#handshake_array[@]} -eq 0 ]
+    {% endraw %}
     then
       echo handshake_array size = 0
       break
