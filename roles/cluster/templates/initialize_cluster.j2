@@ -19,6 +19,10 @@ for((i=0;i<${#master_node_ip_array[@]};i++))
 do
   if [ ${slave_node_ip_array[`expr $i + 1`]} ]
   then
+    if [ ${slave_node_ip_array[`expr $i + 1`]} = ${master_node_ip_array[$i]} ]
+    then
+     break
+    fi
     echo ${master_node_ip_array[$i]}
     echo ${slave_node_ip_array[`expr $i + 1`]}
     redis-cli -h ${slave_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
