@@ -3,8 +3,3 @@
 host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[0] }} \n {% endfor %} {% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n {% endfor %}"
 
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
-if [ ${#master_node_id_array[@]} -lt 1 ]
-then
-echo -e cluster meet $host_string | /root/test-ansible/redis/bin/redis-cli -p 6379
-fi
-
