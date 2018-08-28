@@ -1,3 +1,2 @@
 ---
-redis_bin_dir: /root/test-ansible/redis/bin
 redis_cluster_replicas: 1
