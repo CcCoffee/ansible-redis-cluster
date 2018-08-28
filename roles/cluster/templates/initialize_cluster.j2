@@ -1,14 +1,9 @@
 #!/bin/bash
 
 host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[0] }} \n {% endfor %} {% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n {% endfor %}"
+echo -e $host_string | redis-cli -p 6379
 
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
-{% raw %}
-if [ ${#master_node_id_array[@]} -lt 1 ]
-{% endraw %}
-then
-echo -e $host_string | redis-cli -p 6379
-fi
 
 redis-cli -h 192.168.2.111 -p 6379 cluster addslots {0..5461}
 redis-cli -h 192.168.2.112 -p 6379 cluster addslots {5462..10922}
