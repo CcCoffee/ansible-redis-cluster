@@ -7,13 +7,11 @@ redis-cli -h 192.168.2.111 -p 6379 cluster addslots {0..5461}
 redis-cli -h 192.168.2.112 -p 6379 cluster addslots {5462..10922}
 redis-cli -h 192.168.2.113 -p 6379 cluster addslots {10923..16383}
 
+redis-cli cluster nodes
 slave_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[1] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_ip_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $2}' | cut -d ":" -f 1`)
 master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk '{print $1}'`)
 
-echo sleep 3s
-sleep 3
-redis-cli cluster nodes
 {% raw %}
 for((i=0;i<${#master_node_ip_array[@]};i++))
 {% endraw %}
