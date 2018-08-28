@@ -1,11 +1,11 @@
 #!/bin/bash
 
 host_string="{% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[0] }} \n {% endfor %} {% for host in groups['all'] %} cluster meet {{ hostvars[host]['inventory_hostname'] }} {{ redis_port[1] }} \n {% endfor %}"
-echo -e $host_string | redis-cli -p 6379
+echo -e $host_string | redis-cli -p {{ redis_port[0] }}
 
-redis-cli -h 192.168.2.111 -p 6379 cluster addslots {0..5461}
-redis-cli -h 192.168.2.112 -p 6379 cluster addslots {5462..10922}
-redis-cli -h 192.168.2.113 -p 6379 cluster addslots {10923..16383}
+redis-cli -h {{ hostvars[groups['all'][0]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {0..5461}
+redis-cli -h {{ hostvars[groups['all'][1]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {5462..10922}
+redis-cli -h {{ hostvars[groups['all'][2]]['inventory_hostname'] }} -p {{ redis_port[0] }} cluster addslots {10923..16383}
 
 redis-cli cluster nodes
 
@@ -24,10 +24,10 @@ do
   then
     echo ${master_node_ip_array[$i]}
     echo ${master_node_ip_array[`expr $i + 1`]}
-    redis-cli -h ${master_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
+    redis-cli -h ${master_node_ip_array[`expr $i + 1`]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
   else
     echo ${master_node_ip_array[$i]}
     echo ${master_node_ip_array[0]}
-    redis-cli -h ${master_node_ip_array[0]} -p 6380 cluster replicate ${master_node_id_array[$i]}
+    redis-cli -h ${master_node_ip_array[0]} -p {{ redis_port[1] }} cluster replicate ${master_node_id_array[$i]}
   fi
 done
