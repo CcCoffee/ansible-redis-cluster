@@ -20,11 +20,11 @@ do
   if [ ${master_node_ip_array[`expr $i + 1`]} ]
   then
     echo ${master_node_ip_array[$i]}
-    echo ${slave_node_ip_array[`expr $i + 1`]}
+    echo ${master_node_ip_array[`expr $i + 1`]}
     redis-cli -h ${master_node_ip_array[`expr $i + 1`]} -p 6380 cluster replicate ${master_node_id_array[$i]}
   else
     echo ${master_node_ip_array[$i]}
-    echo ${slave_node_ip_array[0]}
+    echo ${master_node_ip_array[0]}
     redis-cli -h ${master_node_ip_array[0]} -p 6380 cluster replicate ${master_node_id_array[$i]}
   fi
 done
