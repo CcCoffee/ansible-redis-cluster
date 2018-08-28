@@ -7,7 +7,7 @@ master_node_id_array=(`redis-cli cluster nodes | grep {{ redis_port[0] }} | awk 
 if [ ${#master_node_id_array[@]} -lt 1 ]
 {% endraw %}
 then
-echo -e cluster meet $host_string | /root/test-ansible/redis/bin/redis-cli -p 6379
+echo -e $host_string | /root/test-ansible/redis/bin/redis-cli -p 6379
 fi
 
 redis-cli -h 192.168.2.111 -p 6379 cluster addslots {0..5461}
