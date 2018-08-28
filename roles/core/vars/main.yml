@@ -1,6 +1,1 @@
 ---
-version: 4.0.11
-redis_dir: /root/test-ansible/redis
-redis_bin_dir: /root/test-ansible/redis/bin
-redis_install_dir: /root/test-ansible/redis/redis-4.0.11
-redis_install_src_dir: /root/test-ansible/redis/redis-4.0.11/src
