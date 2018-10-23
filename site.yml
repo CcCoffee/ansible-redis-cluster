@@ -3,8 +3,13 @@
   hosts: all
   user: root
   roles:
-    - roles/redissrvs
+    - roles/cluster
   vars:
-    - redis_port:
+    redis_port:
       - 6379
       - 6380
+    version: 4.0.11
+    redis_dir: /root/test-ansible/redis
+    redis_bin_dir: /root/test-ansible/bin
+    redis_install_dir: /root/test-ansible/redis-4.0.11
+    redis_install_src_dir: /root/test-ansible/redis-4.0.11/src

@@ -1,0 +1,10 @@
+---
+# set ruby cluster by ruby script
+- name: Create initialization script
+  template: src=initialize_cluster.j2 dest={{ redis_bin_dir }}/initialize_cluster.sh
+  tags: script
+- name: Initialize cluster
+  shell: bash {{ redis_bin_dir }}/initialize_cluster.sh
+  run_once: true
+  ignore_errors: True
+  tags: script

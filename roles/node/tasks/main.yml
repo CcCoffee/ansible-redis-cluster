@@ -1,0 +1,50 @@
+---
+# install redis
+- name: make install
+  shell: cd {{ redis_install_dir }} && make && cd {{ redis_install_src_dir }} && make PREFIX=../../ install
+- name: copy redis-trib.rb
+  shell: cp {{ redis_install_src_dir }}/redis-trib.rb {{ redis_bin_dir }}
+- name: Create the cluster node redis.conf
+  template:
+    src: "redis.conf.j2"
+    dest: "{{ redis_dir }}/{{ item }}/config/redis_{{ item }}.conf"
+    force: true
+  with_items:
+    - "{{ redis_port }}"
+- name: Create the cluster node redis.service1
+  template:
+    src: "redis.service.j2"
+    dest: "/etc/init.d/redis_{{ item }}.service"
+    force: true
+  with_items:
+    - "{{ redis_port }}"
+- name: Create the cluster node redis.service2
+  template:
+    src: "redis.service.j2"
+    dest: "/etc/init.d/redis_{{ item }}"
+    force: true
+  with_items:
+    - "{{ redis_port }}"
+- name: change mode1
+  shell: chmod 755 /etc/init.d/redis_{{ item }}.service
+  with_items:
+    - "{{ redis_port }}"
+- name: change mode2
+  shell: chmod 755 /etc/init.d/redis_{{ item }}
+  with_items:
+    - "{{ redis_port }}"
+- name: install sysv-rc-conf
+  apt: name=sysv-rc-conf state=latest
+- name: add services into linux
+  shell: sysv-rc-conf redis_{{ item }} on && systemctl daemon-reload
+  with_items:
+    - "{{ redis_port }}"
+- name: start and enable the redis node.
+  service:
+    name: redis_{{ item }}
+    state: restarted
+    enabled: yes
+    force: true
+  tags: script
+  with_items:
+    - "{{ redis_port }}"
